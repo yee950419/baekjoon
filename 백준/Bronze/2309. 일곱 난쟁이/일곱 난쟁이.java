@@ -16,7 +16,7 @@ public class Main {
 	   
 	   Collections.sort(heights);
 	   
-	   for(int a=0; a<3; a++) {
+	   loop : for(int a=0; a<3; a++) {
 		   for(int b=a+1; b<4; b++) {
 			   for(int c=b+1; c<5; c++) {
 				   for(int d=c+1; d<6; d++) {
@@ -33,31 +33,13 @@ public class Main {
 									   System.out.println(heights.get(e));
 									   System.out.println(heights.get(f));
 									   System.out.println(heights.get(g));
-									   break;
+									   break loop;
 								   }
 							   }
-							   if(sum==100) {
-								   break;
-							   }
-						   }
-						   if(sum==100) {
-							   break;
 						   }
 					   }
-					   if(sum==100) {
-						   break;
-					   }
-				   }
-				   if(sum==100) {
-					   break;
 				   }
 			   }
-			   if(sum==100) {
-				   break;
-			   }
-		   }
-		   if(sum==100) {
-			   break;
 		   }
 	   }
    }
