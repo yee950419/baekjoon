@@ -32,7 +32,7 @@ public class Main{
 		
 		initializeResult();
 		
-		min = 100 * N-1;
+		min = 100 * (N-1);
 		System.out.println(getLeastDifference(0, 0));
 	}
 	
