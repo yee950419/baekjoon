@@ -11,8 +11,9 @@ public class Solution {
 	private static StringTokenizer st;
 	private static StringBuilder sb = new StringBuilder();
 	
-	private static int T;
 	private static List<Integer> nums = new ArrayList<Integer>();
+	private static int T;
+	private static int N;
 	private static long sum;
 	
 	public static void main(String[] args) throws IOException {
@@ -27,7 +28,6 @@ public class Solution {
 	
 	static void getResult() throws IOException {
 		
-		int N;
 		int num;
 		int count = T;
 		
@@ -41,16 +41,15 @@ public class Solution {
 				nums.add(num);
 			}
 			
-			int index = 0;
 			sum = 0;
 			sb.append("#" + (count-T) + " ");
-			getMaxProfit(index, N-1);
+			getMaxProfit(0);
 			sb.append(sum + "\n");
 			nums.clear();
 		}
 	}
 	
-	static void getMaxProfit(int index, int maxIndex) {
+	static void getMaxProfit(int index) {
 		int biggest = nums.get(index);
 		int biggestIndex = index;
 		boolean isRemain = false;
@@ -72,9 +71,9 @@ public class Solution {
 				}
 			}
 		}
-		if(biggestIndex != maxIndex)
+		if(biggestIndex != N-1)
 		{
-			getMaxProfit(biggestIndex + 1, maxIndex);
+			getMaxProfit(biggestIndex + 1);
 		}
 	}
 }
