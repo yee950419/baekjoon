@@ -27,6 +27,20 @@ public class Solution {
 	
 	static void getTriangle() throws IOException {
 		
+		//입력이 최대 10이므로 크기가 10인 삼각형 만들기
+		for(int i=0; i<10; i++) {
+			triangle.add(new ArrayList<>());
+			triangle.get(i).add(1);
+		}
+		//세로 길이
+		for(int i=0; i<triangle.size() - 1; i++) {
+			//가로 길이
+			for(int j=0; j<triangle.get(i).size() - 1; j++) {
+				triangle.get(i+1).add(triangle.get(i).get(j) + triangle.get(i).get(j+1));
+			}
+			triangle.get(i+1).add(1);
+		}
+		
 		for(int testCase=1; testCase<=T; testCase++) {
 			
 			st = new StringTokenizer(br.readLine());
@@ -35,26 +49,11 @@ public class Solution {
 			sb.append("#" + testCase + "\n");
 			
 			for(int i=0; i<N; i++) {
-				triangle.add(new ArrayList<>());
-				triangle.get(i).add(1);
-			}
-			//세로 길이
-			for(int i=0; i<triangle.size() - 1; i++) {
-				//가로 길이
-				for(int j=0; j<triangle.get(i).size() - 1; j++) {
-					triangle.get(i+1).add(triangle.get(i).get(j) + triangle.get(i).get(j+1));
-				}
-				triangle.get(i+1).add(1);
-			}
-			
-			for(int i=0; i<triangle.size(); i++) {
 				for(int j=0; j<triangle.get(i).size(); j++) {
 					sb.append(triangle.get(i).get(j) + " ");
 				}
 				sb.append("\n");
 			}
-			
-			triangle.clear();
 		}
 	}
 }
