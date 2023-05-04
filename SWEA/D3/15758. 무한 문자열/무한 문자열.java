@@ -26,11 +26,11 @@ class Solution {
 			
 			sb.append("#" + testCase + " ");
 			
-			getResult(testCase);
+			getResult();
 		}
 	}
 	
-	static void getResult(int testCase) throws IOException {
+	static void getResult() throws IOException {
 		
 		st = new StringTokenizer(br.readLine());
 		String S1 = st.nextToken();
