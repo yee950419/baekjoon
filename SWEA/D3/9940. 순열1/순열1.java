@@ -1,8 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collections;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -37,7 +36,7 @@ class Solution {
 	static void getResult() throws IOException {
 		st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
-		Set<Integer> arraySet = new LinkedHashSet<Integer>();
+		Set<Integer> arraySet = new HashSet<Integer>();
 		
 		st = new StringTokenizer(br.readLine());
 		for(int i=0; i<N; i++) {
