@@ -1,29 +1,26 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
 
-class Solution {
+public class Solution {
 	
 	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	private static StringTokenizer st;
 	private static StringBuilder sb = new StringBuilder();
 	
-	private static int T;
 	private static final int SIZE = 9;
-	private static List<List<Integer>> sudoku = new ArrayList<>(SIZE);
-	private static List<Integer> temp;
+	private static int T;
+	private static int[][] sudoku = new int[SIZE][SIZE];
 	
 	public static void main(String[] args) throws IOException {
 		
 		st = new StringTokenizer(br.readLine());
-		
 		T = Integer.parseInt(st.nextToken());
-		loopTest();
 		
+		loopTest();
 		System.out.println(sb);
 	}
 	
@@ -33,82 +30,67 @@ class Solution {
 			
 			sb.append("#" + testCase + " ");
 			
-			int input;
-			for(int i=0; i<SIZE; i++) {
+			getIsSudokuComplete();
+		}
+	}
+
+	static void getIsSudokuComplete() throws IOException {
+		
+		for(int i=0; i<SIZE; i++) {
+			
+			st = new StringTokenizer(br.readLine());
+			for(int j=0; j<SIZE; j++) {
 				
-				st = new StringTokenizer(br.readLine());
-				sudoku.add(new ArrayList<>(SIZE));
-				for(int j=0; j<SIZE; j++) {
-					
-					input = Integer.parseInt(st.nextToken());
-					sudoku.get(i).add(input);
-				}
+				sudoku[i][j] = Integer.parseInt(st.nextToken());
 			}
-			
-			if(validateSudoku()) {
-				sb.append(1 + "\n");
-			}
-			else {
-				sb.append(0 + "\n");
-			}
-			
-			sudoku.clear();
+		}
+		
+		if(isComplete()) {
+			sb.append(1 + "\n");
+		}
+		else {
+			sb.append(0 + "\n");
 		}
 	}
 	
-	static boolean validateSudoku() {
+	static boolean isComplete() {
 		
-		boolean isSudoku = true;
-		temp = new ArrayList<>(SIZE);
+		Set<Integer> nums = new HashSet<>();
 		
-		//가로 확인
+		//가로 방향 확인
 		for(int i=0; i<SIZE; i++) {
-			temp.clear();
+			
 			for(int j=0; j<SIZE; j++) {
 				
-				temp.add(sudoku.get(i).get(j));
+				nums.add(sudoku[i][j]);
 			}
 			
-			if(!validate()) {
-				isSudoku = false;
+			if(nums.size() != SIZE) {
+				
+				return false;
 			}
+			nums.clear();
 		}
 		
-		//세로 확인
+		//세로 방향 확인
 		for(int i=0; i<SIZE; i++) {
-			temp.clear();
+			
 			for(int j=0; j<SIZE; j++) {
 				
-				temp.add(sudoku.get(j).get(i));
+				nums.add(sudoku[j][i]);
 			}
 			
-			Collections.sort(temp);
-			
-			if(!validate()) {
-				isSudoku = false;
+			if(nums.size() != SIZE) {
+				
+				return false;
 			}
+			nums.clear();
 		}
 		
-		//격자 확인
+		//3X3 격자 확인
 		for(int i=0; i<3; i++) {
-			for(int j=0; j<3; j++) {
+			if(!validate3X3Vertical(i*3, SIZE/3 * (i+1))) {
 				
-				temp.clear();
-				if(!gridValidate(i, j)) {
-					isSudoku = false;
-				}
-			}
-		}
-		
-		
-		return isSudoku;
-	}
-	
-	static boolean validate() {
-		
-		Collections.sort(temp);
-		for(int j=0; j<SIZE-1; j++) {
-			if(temp.get(j) == temp.get(j+1)) {
 				return false;
 			}
 		}
@@ -116,15 +98,34 @@ class Solution {
 		return true;
 	}
 	
-	static boolean gridValidate(int column, int row) {
+	static boolean validate3X3Vertical(int start, int end) {
 		
-		for(int i=column*3; i<(column*3)+3; i++) {
-			for(int j=row*3; j<(row*3)+3; j++) {
-				temp.add(sudoku.get(i).get(j));
+		for(int i=0; i<3; i++) {
+			
+			for(int j=start; j<end; j++) {
+				if(!validate3X3Horizontal(start, end, i*3, SIZE/3 * (i+1))) {
+					
+					return false;
+				}
 			}
 		}
 		
-		if(!validate()) {
+		return true;
+	}
+	
+	static boolean validate3X3Horizontal(int startI, int endI, int startJ, int endJ) {
+		
+		Set<Integer> nums = new HashSet<>();
+		
+		for(int i=startI; i<endI; i++) {
+		
+			for(int j=startJ; j<endJ; j++) {
+				nums.add(sudoku[i][j]);
+			}
+		}
+		
+		if(nums.size() != SIZE) {
+			
 			return false;
 		}
 		
