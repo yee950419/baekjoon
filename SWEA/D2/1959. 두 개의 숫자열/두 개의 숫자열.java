@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-class Solution {
+public class Solution {
 	
 	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	private static StringTokenizer st;
@@ -11,7 +11,6 @@ class Solution {
 	
 	private static int T;
 	private static int N, M;
-	private static int[] A, B;
 	
 	public static void main(String[] args) throws IOException {
 		
@@ -28,63 +27,52 @@ class Solution {
 			
 			sb.append("#" + testCase + " ");
 			
-			inputLength();
-			inputData();
-			getResult();
+			getMaxResult();
 		}
 	}
 	
-	static void inputLength() throws IOException {
+	static void getMaxResult() throws IOException {
 		
 		st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
-	}
-	
-	static void inputData() throws IOException {
-
-		A = new int[N];
-		B = new int[M];
+		
+		int[] A = new int[N];
+		int[] B = new int[M];
+		
 		st = new StringTokenizer(br.readLine());
 		for(int i=0; i<N; i++) {
-			
 			A[i] = Integer.parseInt(st.nextToken());
 		}
-
+		
 		st = new StringTokenizer(br.readLine());
 		for(int i=0; i<M; i++) {
-			
 			B[i] = Integer.parseInt(st.nextToken());
+		}
+		
+		if(A.length < B.length) {
+			getResult(A, B);
+		}
+		else {
+			getResult(B, A);
 		}
 	}
 	
-	static void getResult() {
+	static void getResult(int[] shorter, int[] longger) {
 		
-		int[] bigArray, smallArray;
-		int biggestSum, sum;
-		
-		if(N>M) {
-			bigArray = A;
-			smallArray = B;
-		}
-		else {
-			bigArray = B;
-			smallArray = A;
-		}
-		
-		biggestSum = 0;
-		for(int i=0; i<bigArray.length - smallArray.length + 1; i++) {
+		int maxSum = 0;
+		for(int i=0; i<=longger.length-shorter.length; i++) {
 			
-			sum = 0;
-			for(int j=0; j<smallArray.length; j++) {
-				sum += bigArray[j+i] * smallArray[j];
+			int sum = 0;
+			for(int j=0; j<shorter.length; j++) {
+				sum += shorter[j] * longger[i+j];
 			}
 			
-			if(biggestSum < sum) {
-				biggestSum = sum;
+			if(maxSum < sum) {
+				maxSum = sum;
 			}
 		}
 		
-		sb.append(biggestSum + "\n");
+		sb.append(maxSum + "\n");
 	}
 }
