@@ -1,0 +1,14 @@
+-- 코드를 입력하세요
+SELECT MP.MEMBER_NAME, RR.REVIEW_TEXT, 
+       DATE_FORMAT(RR.REVIEW_DATE, '%Y-%m-%d') AS REVIEW_DATE
+  FROM MEMBER_PROFILE MP
+  JOIN REST_REVIEW RR ON (MP.MEMBER_ID = RR.MEMBER_ID)
+ WHERE MP.MEMBER_ID IN (SELECT RR2.MEMBER_ID
+                         FROM REST_REVIEW  RR2
+                        GROUP BY RR2.MEMBER_ID
+                       HAVING COUNT(RR2.MEMBER_ID) = 
+                       (SELECT MAX(RR4.MEMBER_COUNT)
+                          FROM (SELECT COUNT(RR3.MEMBER_ID) AS MEMBER_COUNT
+                                  FROM REST_REVIEW RR3
+                                 GROUP BY RR3.MEMBER_ID) AS RR4))
+ ORDER BY REVIEW_DATE, RR.REVIEW_TEXT;
