@@ -1,79 +1,59 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
-public class Solution {
+public class Solution{
 	
-	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	private static StringTokenizer st;
-	private static StringBuilder sb = new StringBuilder();
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static StringTokenizer st;
+	static StringBuilder sb = new StringBuilder();
 	
-	private static List<Integer> nums = new ArrayList<Integer>();
-	private static int T;
-	private static int N;
-	private static long sum;
+	static int T, N;
+	static int[] nums;
 	
 	public static void main(String[] args) throws IOException {
-
-		st = new StringTokenizer(br.readLine());
 		
-		T = Integer.parseInt(st.nextToken());
-		
-		getResult();
+		T = Integer.parseInt(br.readLine());
+		loopTest();
 		System.out.println(sb);
 	}
 	
-	static void getResult() throws IOException {
+	static void loopTest() throws IOException {
 		
-		int num;
-		int count = T;
-		
-		while(T-- > 0) {
-			st = new StringTokenizer(br.readLine());
-			N = Integer.parseInt(st.nextToken());
+		for(int testCase=1; testCase<=T; testCase++) {
+			sb.append("#" + testCase + " ");
 			
-			st = new StringTokenizer(br.readLine());
-			for(int i=0; i<N; i++) {
-				num = Integer.parseInt(st.nextToken());
-				nums.add(num);
-			}
-			
-			sum = 0;
-			sb.append("#" + (count-T) + " ");
-			getMaxProfit(0);
-			sb.append(sum + "\n");
-			nums.clear();
+			inputDatas();
+			getMaxProfit();
 		}
 	}
 	
-	static void getMaxProfit(int index) {
-		int biggest = nums.get(index);
-		int biggestIndex = index;
-		boolean isRemain = false;
+	static void inputDatas() throws IOException {
 		
-		//가장 높은 수의 인덱스 찾기
-		for(int i=index; i<nums.size(); i++) {
-			if(biggest < nums.get(i)) {
-				biggest = nums.get(i);
-				biggestIndex = i;
-				isRemain = true;
+		N = Integer.parseInt(br.readLine());
+		nums = new int[N];
+		
+		st = new StringTokenizer(br.readLine());
+		for(int i=0; i<N; i++) {
+			int num = Integer.parseInt(st.nextToken());
+			nums[i] = num;
+		}
+	}
+	
+	static void getMaxProfit() {
+		
+		int sellNum = nums[N-1];
+		long profit = 0;
+		for(int i=1; i<N; i++) {
+			if(nums[N-i-1] > sellNum) {
+				sellNum = nums[N-i-1];
+			}
+			else {
+				profit += sellNum - nums[N-i-1];
 			}
 		}
 		
-		if(isRemain) {
-			for(int i=index; i<biggestIndex; i++) {
-				int result = nums.get(biggestIndex) - nums.get(i);
-				if(result > 0) {
-					sum += result;
-				}
-			}
-		}
-		if(biggestIndex != N-1)
-		{
-			getMaxProfit(biggestIndex + 1);
-		}
+		sb.append(profit + "\n");
 	}
 }
