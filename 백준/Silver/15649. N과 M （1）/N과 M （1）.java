@@ -11,7 +11,6 @@ public class Main {
 	
 	static int N, M;
 	static int[] data;
-	static boolean[] visit;
 
 	public static void main(String[] args) throws IOException {
 		
@@ -19,12 +18,11 @@ public class Main {
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 		data = new int[M];
-		visit = new boolean[N];
-		dfs(0);
+		dfs(0, 0);
 		System.out.println(sb);
 	}
 	
-	static void dfs(int depth) {
+	static void dfs(int depth, int flag) {
 		
 		if(depth == M) {
 			for(int i=0; i<M; i++) {
@@ -35,11 +33,9 @@ public class Main {
 		}
 		
 		for(int i=0; i<N; i++) {
-			if(!visit[i]) {
-				visit[i] = true;
+			if((flag & 1<<i) == 0) {
 				data[depth] = i+1;
-				dfs(depth+1);
-				visit[i] = false;
+				dfs(depth+1, flag | 1<<i);
 			}
 		}
 	}
