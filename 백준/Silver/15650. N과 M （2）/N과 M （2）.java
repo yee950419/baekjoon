@@ -1,46 +1,41 @@
-import java.util.Arrays;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
- 
-	public static void main(String[] args) {
- 
-		Scanner sc = new Scanner(System.in);
+	
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static StringTokenizer st;
+	static StringBuilder sb = new StringBuilder();
+	
+	static int N, M;
+	static int[] nums;
+	
+	public static void main(String[] args) throws IOException {
 		
-		int N = sc.nextInt();
-		int M = sc.nextInt();
+		st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		nums = new int[M];
 		
-		int[] arr = new int[M];
-		Arrays.fill(arr, 0);
-		boolean[] visit = new boolean[N];
-		
-		dfs(N, M, 0, arr, visit);
+		combi(0, 1);
+		System.out.println(sb);
 	}
- 
-	public static void dfs(int N, int M, int index, int[] arr, boolean[] visit) {
-
-		if (index == M) {
-			for(int i=0; i<arr.length; i++) {
-				System.out.print(arr[i] + " ");
+	
+	static void combi(int depth, int start) {
+		
+		if(depth == M) {
+			for(int n : nums) {
+				sb.append(n + " ");
 			}
-			System.out.println();
+			sb.append("\n");
 			return;
 		}
 		
-		for (int i = 0; i < N; i++) {
-			if (!visit[i]) {
-				visit[i] = true;
-				arr[index] = i + 1;
-				if(index == 0) {
-					dfs(N, M, index + 1, arr, visit);
-				}
-				else {
-					if(arr[index-1] < arr[index]) {
-						dfs(N, M, index + 1, arr, visit);
-					}
-				}
-				visit[i] = false;
-			}
+		for(int i=start; i<=N; i++) {
+			nums[depth] = i;
+			combi(depth+1, i+1);
 		}
 	}
 }
