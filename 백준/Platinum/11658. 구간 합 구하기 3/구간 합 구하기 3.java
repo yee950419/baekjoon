@@ -7,6 +7,7 @@ public class Main {
 	
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringTokenizer st;
+	static StringBuilder sb = new StringBuilder();
 	
 	static int N, M;
 	static int[][] map;
@@ -41,6 +42,8 @@ public class Main {
 				getCaseOneResult();
 			}
 		}
+		
+		System.out.println(sb);
 	}
 	
 	static void getCaseZeroResult() {
@@ -67,6 +70,6 @@ public class Main {
 			sum += sumMap[i][y2] - sumMap[i][y1-1];
 		}
 		
-		System.out.println(sum);
+		sb.append(sum + "\n");
 	}
 }
