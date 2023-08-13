@@ -3,74 +3,33 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-class Solution {
+public class Solution {
+
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static StringTokenizer st;
+	static StringBuilder sb = new StringBuilder();
 	
-	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	private static StringTokenizer st;
-	private static StringBuilder sb = new StringBuilder();
-	
-	private static int TC;
-	private static int N, M;
+	static int T, N, M;
 	
 	public static void main(String[] args) throws IOException {
 		
-		st = new StringTokenizer(br.readLine());
-		TC = Integer.parseInt(st.nextToken());
-		
+		T = Integer.parseInt(br.readLine());
 		loopTest();
 		System.out.println(sb);
 	}
-
+	
 	static void loopTest() throws IOException {
 		
-		for(int testCase=1; testCase<=TC; testCase++) {
-			sb.append("#" + testCase + " ");
+		for(int tc=1; tc<=T; tc++) {
 			
-			getIsBitAllOneOrNot();
-		}
-	}
-	
-	static void getIsBitAllOneOrNot() throws IOException {
-		
-		st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		
-		int size = 0;
-		int temp = 1;
-		while(M / temp != 0) {
-					
-			size++;
-			temp *= 2;
-		}
-		
-		String strM = "";
-		for(int i=0; i<size; i++) {
-
-			if(M >= Math.pow(2, size-1-i)) {
-				strM += "1";
-				M -= Math.pow(2, size-1-i);
-			}
-			else {
-				strM += "0";
-			}
-		}
-		
-		boolean isAllOne = true;
-		if(size < N) {
-			sb.append("OFF\n");
-		}
-		else {
-			for(int i=0; i<N; i++) {
-				
-				int idx = strM.length()-1-i;
-				if(strM.charAt(idx) != '1') {
-					isAllOne = false;
-					break;
-				}
-			}
+			sb.append("#" + tc + " ");
 			
-			if(isAllOne) {
+			st = new StringTokenizer(br.readLine());
+			N = Integer.parseInt(st.nextToken());
+			M = Integer.parseInt(st.nextToken());
+			
+			int mask = (1<<N)-1;	// 오른쪽부터 M만큼 1로 변경
+			if(mask == (M & mask)) {	// & 연산자를 통해 결과가 mask와 같은지 확인
 				sb.append("ON\n");
 			}
 			else {
