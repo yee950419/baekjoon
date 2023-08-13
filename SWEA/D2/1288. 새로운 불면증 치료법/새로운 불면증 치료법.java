@@ -4,63 +4,48 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-class Solution {
+public class Solution {
+
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static StringTokenizer st;
+	static StringBuilder sb = new StringBuilder();
 	
-	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	private static StringTokenizer st;
-	private static StringBuilder sb = new StringBuilder();
+	static int T, N;
+	static int check;	// 비트마스킹을 통한 체크
+	static int isAllChecked = (1<<10) - 1;	// 10자리 다 체크되었는지 확인
 	
-	private static int T;
-	private static int N;
-	
-	private static boolean[] visit = new boolean[10];
 	
 	public static void main(String[] args) throws IOException {
-		
-		st = new StringTokenizer(br.readLine());
-		T = Integer.parseInt(st.nextToken());
-		
+		T = Integer.parseInt(br.readLine());
 		loopTest();
 		System.out.println(sb);
 	}
 	
 	static void loopTest() throws IOException {
 		
-		for(int testCase=1; testCase<=T; testCase++) {
+		for(int tc=1; tc<=T; tc++) {
 			
-			sb.append("#" + testCase + " ");
+			sb.append("#" + tc + " ");
 			
-			Arrays.fill(visit, false);
-			getCount();
-		}
-	}
-	
-	static void getCount() throws IOException {
-		
-		st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		String strN = "";
-		
-		int visitCount = 0;
-		int multipleCount = 1;
-		int index = 0;
-		while(visitCount != 10) {	
-			
-			strN = String.valueOf(N * multipleCount);
-			for(int i=0; i<strN.length(); i++) {
+			N = Integer.parseInt(br.readLine());
+			check = 0;
+			for(int i=1;;i++) {
 				
-				index = strN.charAt(i)-'0';
-				if(!visit[index]) {
-					
-					visit[index] = true;
-					visitCount++;
+				int temp = N*i;
+				while(temp > 0) {
+					int tempN = temp%10;
+					if((check & 1<<tempN) == 0) {
+						check |= (1<<tempN);
+					}
+					temp /= 10;
+				}
+
+				if(check == isAllChecked) {
+					sb.append((N*i) + "\n");
+					break;
 				}
 			}
-			
-			multipleCount++;
 		}
 		
-		multipleCount--;
-		sb.append(N*multipleCount + "\n");
 	}
 }
