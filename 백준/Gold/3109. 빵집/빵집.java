@@ -44,21 +44,17 @@ public class Main {
 			return;
 		}
 		
-		if(x-1 >= 0 && map[x-1][y+1] == '.') {
-			map[x-1][y+1] = 'X';
+		if(x-1 >= 0 && map[x-1][y+1] != 'x') {
+			map[x-1][y+1] = 'x';
 			dfs(x-1, y+1);
 		}
-		if(!isSuccess) {
-			if(map[x][y+1] == '.') {
-				map[x][y+1] = 'X';
-				dfs(x, y+1);
-			}
+		if(!isSuccess && map[x][y+1] != 'x') {
+			map[x][y+1] = 'x';
+			dfs(x, y+1);
 		}
-		if(!isSuccess) {
-			if(x+1 < R && map[x+1][y+1] == '.') {
-				map[x+1][y+1] = 'X';
-				dfs(x+1, y+1);
-			}
+		if(!isSuccess && x+1 < R && map[x+1][y+1] != 'x') {
+			map[x+1][y+1] = 'x';
+			dfs(x+1, y+1);
 		}
 	}
 }
