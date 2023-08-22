@@ -85,47 +85,55 @@ public class Main {
 			for(int i=0, size=sharks.size(); i<size; i++) {
 				
 				int speed = sharks.get(i).speed;
-				if(sharks.get(i).dir == 1 || sharks.get(i).dir == 2) {
+				int sharkX = sharks.get(i).x;
+				int sharkY = sharks.get(i).y;
+				int dir = sharks.get(i).dir;
+				
+				if(dir == 1 || dir == 2) {
 					
 					while(speed > 0) {
-						if(sharks.get(i).x > 1 && sharks.get(i).dir == 1) {
-							sharks.get(i).x--;
+						if(sharkX > 1 && dir == 1) {
+							sharkX--;
 						}
-						else if(sharks.get(i).x == 1) {
-							sharks.get(i).x++;
-							sharks.get(i).dir = 2;
+						else if(sharkX == 1) {
+							sharkX++;
+							dir = 2;
 						}
-						else if(sharks.get(i).x < R && sharks.get(i).dir == 2) {
-							sharks.get(i).x++;
+						else if(sharkX < R && dir == 2) {
+							sharkX++;
 						}
-						else if(sharks.get(i).x == R) {
-							sharks.get(i).x--;
-							sharks.get(i).dir = 1;
+						else if(sharkX == R) {
+							sharkX--;
+							dir = 1;
 						}
 						speed--;
 					}
 					
 				}
-				else if(sharks.get(i).dir == 3 || sharks.get(i).dir == 4) {
+				else if(dir == 3 || dir == 4) {
 					
 					while(speed > 0) {
-						if(sharks.get(i).y < C && sharks.get(i).dir == 3) {
-							sharks.get(i).y++;
+						if(sharkY < C && dir == 3) {
+							sharkY++;
 						}
-						else if(sharks.get(i).y == C) {
-							sharks.get(i).y--;
-							sharks.get(i).dir = 4;
+						else if(sharkY == C) {
+							sharkY--;
+							dir = 4;
 						}
-						else if(sharks.get(i).y > 1 && sharks.get(i).dir == 4) {
-							sharks.get(i).y--;
+						else if(sharkY > 1 && dir == 4) {
+							sharkY--;
 						}
-						else if(sharks.get(i).y == 1) {
-							sharks.get(i).y++;
-							sharks.get(i).dir = 3;
+						else if(sharkY == 1) {
+							sharkY++;
+							dir = 3;
 						}
 						speed--;
 					}
 				}
+				sharks.get(i).x = sharkX;
+				sharks.get(i).y = sharkY;
+				sharks.get(i).dir = dir;
+				
 			}
 		}
 	}
