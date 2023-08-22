@@ -8,6 +8,8 @@ public class Main{
 	
 	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	private static StringTokenizer st;
+	private static StringBuilder sb = new StringBuilder();
+	
 	private static char[] alphabet;
 	private static char[] temp;
 	private static int L;
@@ -31,44 +33,43 @@ public class Main{
 		Arrays.fill(temp, alphabet[0]);
 		
 		printAllCase(0, 0, 0);
+		System.out.println(sb);
 	}
 	
-	public static void printAllCase(int consonantNum, int vowelNum, int index) {
+	public static void printAllCase(int consonantNum, int vowelNum, int depth) {
 		
-		if(index == L) {
+		if(depth == L) {
 			if(consonantNum >= 2 && vowelNum >= 1) {
-				if(isSorted(index)) {
+				if(isSorted(depth)) {
 					for(int i=0; i<temp.length; i++) {
-						System.out.print(temp[i]);
+						sb.append(temp[i]);
 					}
-					System.out.println();
+					sb.append("\n");
 				}
 			}
 			return;
 		}
 		
-		for(int i=index; i<C; i++) {
+		for(int i=depth; i<C; i++) {
 			if(isVowel(i)) {
-				vowelNum++;
-				temp[index] = alphabet[i];
-				if(isSorted(index)) {
-					printAllCase(consonantNum, vowelNum, index+1);
+				temp[depth] = alphabet[i];
+				if(isSorted(depth)) {
+					vowelNum++;
+					printAllCase(consonantNum, vowelNum, depth+1);
 					vowelNum--;
 				}
 				else {
-					vowelNum--;
 					return;
 				}
 			}
 			else if(!isVowel(i)){
-				consonantNum++;
-				temp[index] = alphabet[i];
-				if(isSorted(index)) {
-					printAllCase(consonantNum, vowelNum, index+1);
+				temp[depth] = alphabet[i];
+				if(isSorted(depth)) {
+					consonantNum++;
+					printAllCase(consonantNum, vowelNum, depth+1);
 					consonantNum--;
 				}
 				else {
-					consonantNum--;
 					return;
 				}
 			}
@@ -88,6 +89,7 @@ public class Main{
 		return false;
 	}
 	
+	// 정렬이 되었는지 체크
 	public static boolean isSorted(int index) {
 		for(int i=0; i<index-1; i++) {
 			if(temp[i] >= temp[i+1]) {
