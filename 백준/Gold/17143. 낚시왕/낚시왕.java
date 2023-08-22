@@ -143,20 +143,21 @@ public class Main {
 		// sharks list에서 겹치는 상어 있으면 잡아먹고, map 초기화
 		map = new int[R+1][C+1];
 		for(int i=0, size=sharks.size(); i<size; i++) {
-			if(!sharks.get(i).isKilled) {
-				
-				int idx = map[sharks.get(i).x][sharks.get(i).y];
+			
+			Shark find = sharks.get(i);
+			if(!find.isKilled) {		
+				int idx = map[find.x][find.y];
 				if(idx != 0) {
-					if(sharks.get(i).size > sharks.get(idx-1).size) {
+					if(find.size > sharks.get(idx-1).size) {
 						sharks.get(idx-1).isKilled = true;
-						map[sharks.get(i).x][sharks.get(i).y] = i+1;
+						map[find.x][sharks.get(i).y] = i+1;
 					}
 					else {
 						sharks.get(i).isKilled = true;
 					}
 				}
 				else {
-					map[sharks.get(i).x][sharks.get(i).y] = i+1;
+					map[find.x][find.y] = i+1;
 				}
 			}
 		}
