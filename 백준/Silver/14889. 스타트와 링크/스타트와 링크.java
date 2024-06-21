@@ -3,82 +3,85 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Main{
+public class Main {
 	
-	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	private static StringTokenizer st;
-	private static int N;
-	private static int[][] S;
-	private static int[][] result;
-	private static boolean[] visit;
-	private static int min;
-	private static int difference;
-	
+	static int[][] abilityMap;
+	static int[][] sumMap;
+	static boolean[] visit;
+	static int[] myTeam;
+	static int smallestAbilityDiff;
+	static int N;
+
 	public static void main(String[] args) throws IOException {
-	
-		st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		S = new int[N][N];
-		visit = new boolean[N];
-		result = new int[N][N];
 		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		
+		N = Integer.parseInt(br.readLine());
+		abilityMap = new int[N][N];
 		for(int i=0; i<N; i++) {
 			
 			st = new StringTokenizer(br.readLine());
 			for(int j=0; j<N; j++) {
-				S[i][j] = Integer.parseInt(st.nextToken());
+				
+				abilityMap[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
 		
-		initializeResult();
+		sumMap = new int[N][N];
+		for(int i=0; i<N; i++) {
+			
+			for(int j=0; j<N; j++) {
+				sumMap[i][j] = abilityMap[i][j] + abilityMap[j][i];
+			}
+		}
 		
-		min = 200;
-		System.out.println(getLeastDifference(0, 0));
+		visit = new boolean[N];
+		myTeam = new int[N/2];
+		smallestAbilityDiff = Integer.MAX_VALUE;
+		getAbilityDiff(0, 0);
+		
+		System.out.println(smallestAbilityDiff);
 	}
 	
-	public static int getLeastDifference(int index, int depth) {
+	static void getAbilityDiff(int depth, int start) {
 		
 		if(depth == N/2) {
 			
-			difference = getDifference();
-			return min < difference ? min : difference;
+			int myTeamAbility = 0;
+			int apponentAbility = 0;
+			for(int i=0; i<N-1; i++) {
+				
+				for(int j=i+1; j<N; j++) {
+					
+					if(visit[i] && visit[j]) {
+						myTeamAbility += sumMap[i][j];
+					}
+					else if(!visit[i] && !visit[j]) {
+						apponentAbility += sumMap[i][j];
+					}
+				}
+			}
+			
+			int diff = Math.abs(myTeamAbility - apponentAbility);
+			if(diff == 0) {
+				System.out.println(diff);
+				System.exit(0);
+			}
+			if(diff < smallestAbilityDiff) {
+				
+				smallestAbilityDiff = diff;
+			}
+			
+			return;
 		}
 		
-		for(int i=index; i<N; i++) {
+		for(int i=start; i<N; i++) {
 			if(!visit[i]) {
+				myTeam[depth] = i;
 				visit[i] = true;
-				min = getLeastDifference(i + 1, depth + 1);
+				getAbilityDiff(depth+1, i+1);
 				visit[i] = false;
-			}
-		}
-		
-		return min;
-	}
-	
-	public static int getDifference() {
-		
-		int startTeamSum = 0;
-		int linkTeamSum = 0;
-		
-		for(int i=0; i<N-1; i++) {
-			for(int j=i+1; j<N; j++) {
-				if(visit[i] && visit[j]) {
-					startTeamSum += result[i][j];
-				}
-				if(!visit[i] && !visit[j]) {
-					linkTeamSum += result[i][j];
-				}
-			}
-		}
-		
-		return Math.abs(startTeamSum - linkTeamSum);
-	}
-	
-	public static void initializeResult() {
-
-		for(int i=0; i<N; i++) {
-			for(int j=0; j<N; j++) {
-				result[i][j] = S[i][j] + S[j][i];
 			}
 		}
 	}
