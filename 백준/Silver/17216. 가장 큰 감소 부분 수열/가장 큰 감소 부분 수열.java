@@ -21,7 +21,6 @@ public class Main {
 		int result = array[0];
 		int[] sumArray = new int[N];
 		sumArray[0] = array[0];
-		boolean hasBigNum = false;
 		for(int i=1; i<N; i++) {
 			
 			int biggest = 0;
