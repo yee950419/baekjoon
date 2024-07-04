@@ -1,68 +1,66 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static StringTokenizer st;
 	
+	static int[] dx = {0, 1, 0, -1};
+	static int[] dy = {-1, 0, 1, 0};
+	
+	static boolean[] visitedAlphabet = new boolean[26];
+	static boolean[][] visit;
+	static int maxResult = 0;
 	static int R, C;
 	static char[][] map;
-	static boolean[][] visited;
-	static boolean[] isUsed = new boolean[26];
-	static int[] dr = {-1, 0, 1, 0};
-	static int[] dc = {0, 1, 0, -1};
-	static int maxCount;
-	
+
 	public static void main(String[] args) throws IOException {
+	
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
-		st = new StringTokenizer(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		R = Integer.parseInt(st.nextToken());
 		C = Integer.parseInt(st.nextToken());
 		
-		visited = new boolean[R][C];
 		map = new char[R][C];
+		visit = new boolean[R][C];
 		for(int i=0; i<R; i++) {
+			
 			String str = br.readLine();
 			for(int j=0; j<C; j++) {
+				
 				map[i][j] = str.charAt(j);
 			}
 		}
+
+		visit[0][0] = true;
+		visitedAlphabet[map[0][0] - 'A'] = true;
+		dfs(1, 0, 0);
 		
-		maxCount = 1;
-		dfs(0, 0, 1);
-		
-		System.out.println(maxCount);
+		System.out.println(maxResult);
 	}
 	
-	static void dfs(int x, int y, int count) {
-		
-		visited[x][y] = true;
-		isUsed[map[x][y] - 'A'] = true;
-		
-		if(count > maxCount) {
-			maxCount = count;
-		}
+	static void dfs(int depth, int xP, int yP) {
+
+		maxResult = Math.max(depth, maxResult);
 		
 		for(int i=0; i<4; i++) {
 			
-			int dx = dr[i] + x;
-			int dy = dc[i] + y;
+			int x = xP + dx[i];
+			int y = yP + dy[i];
 			
-			if(dx >= 0 && dx < R && dy >= 0 && dy < C) {
-				int idx = map[dx][dy] - 'A';
-				
-				if(!isUsed[idx] && !visited[dx][dy]) {
-					isUsed[idx] = true;
-					visited[dx][dy] = true;
-					dfs(dx, dy, count+1);
-					visited[dx][dy] = false;
-					isUsed[idx] = false;
-				}
+			if(x >= C || x < 0 || y >= R || y < 0) {
+				continue;
 			}
+			if(visit[y][x] || visitedAlphabet[map[y][x] - 'A']) {
+				continue;
+			}
+			
+			visit[y][x] = true;
+			visitedAlphabet[map[y][x] - 'A'] = true;
+			dfs(depth+1, x, y);
+			visit[y][x] = false;
+			visitedAlphabet[map[y][x] - 'A'] = false;
 		}
 	}
 }
