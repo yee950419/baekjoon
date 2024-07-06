@@ -1,0 +1,60 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	public static void main(String[] args) throws IOException {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		StringBuilder sb = new StringBuilder();
+		
+		int N = Integer.parseInt(br.readLine());
+		
+		int[] skillList = new int[N];
+		boolean[] usedCard = new boolean[N];
+		st = new StringTokenizer(br.readLine());
+		for(int i=0; i<N; i++) {
+			
+			skillList[i] = Integer.parseInt(st.nextToken());
+		}
+		
+		int start = 0;
+		int end = N-1;
+		int second = 1;
+		int[] cardList = new int[N];
+		for(int i=0; i<N; i++) {
+			
+			int skill = skillList[i];
+			if(skill == 1) {
+				
+				cardList[start] = N-i;
+				usedCard[start] = true;
+				
+				while(start < N && usedCard[start]) {
+					start++;
+				}
+				second = start + 1;
+			}
+			else if(skill == 2) {
+				
+				cardList[second] = N-i;
+				usedCard[second] = true;
+				second++;
+			}
+			else if(skill == 3) {
+				cardList[end] = N-i;
+				usedCard[end] = true;
+				end--;
+			}
+		}
+		
+		for(int i=0; i<N; i++) {
+			sb.append(cardList[i]).append(" ");
+		}
+		
+		System.out.println(sb);
+	}
+}
