@@ -14,7 +14,6 @@ public class Main {
 		int N = Integer.parseInt(br.readLine());
 		
 		int[] skillList = new int[N];
-		boolean[] usedCard = new boolean[N];
 		st = new StringTokenizer(br.readLine());
 		for(int i=0; i<N; i++) {
 			
@@ -31,22 +30,17 @@ public class Main {
 			if(skill == 1) {
 				
 				cardList[start] = N-i;
-				usedCard[start] = true;
 				
-				while(start < N && usedCard[start]) {
-					start++;
-				}
+				start = second;
 				second = start + 1;
 			}
 			else if(skill == 2) {
 				
 				cardList[second] = N-i;
-				usedCard[second] = true;
 				second++;
 			}
 			else if(skill == 3) {
 				cardList[end] = N-i;
-				usedCard[end] = true;
 				end--;
 			}
 		}
