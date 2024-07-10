@@ -2,10 +2,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -20,7 +19,6 @@ public class Main {
 		int M = Integer.parseInt(st.nextToken());
 		
 		int[] costList = new int[N+1];
-		boolean[] visit = new boolean[N+1];
 		for(int i=1; i<=N; i++) {
 			costList[i] = Integer.parseInt(br.readLine());
 		}
@@ -30,80 +28,61 @@ public class Main {
 			weightList[i] = Integer.parseInt(br.readLine());
 		}
 		
-		Deque<Integer> orderQ = new ArrayDeque<>();
-		for(int i=0; i<M*2; i++) {
-			orderQ.add(Integer.parseInt(br.readLine()));
-		}
-		
-		Map<Integer, Integer> costMap = new HashMap<>();
-		int parkCnt = 0;
+		Map<Integer, Integer> map = new HashMap<>();
+		Queue<Integer> q = new ArrayDeque<>();
+		boolean[] isUsing = new boolean[N+1];
 		int sum = 0;
-		int totalCnt = 0;
+		int parkCnt = 0;
 		for(int i=0; i<M*2; i++) {
 			
-			int order = orderQ.poll();
+			int order = Integer.parseInt(br.readLine());
 			
-			// 차량이 들어오는 경우
+			// 차량이 들어올 때,
 			if(order > 0) {
 				
-				// 주차장이 다 차지 않았을 때,
+				// 주차장에 공간이 있는 경우, 작은 주차장 번호부터 탐색하여 사용하지 않는 주차장을 할당시키고 그 비용을 map에 저장, 주차 카운트 증가 및 합산 증가
 				if(parkCnt < N) {
 					
 					for(int j=1; j<=N; j++) {
-						if(!visit[j]) {
-							
-							sum += costList[j] * weightList[order];
-							visit[j] = true;
-							costMap.put(order, j);
+						
+						if(!isUsing[j]) {
+							isUsing[j] = true;
+							map.put(order, j);
 							break;
 						}
 					}
 					
+					sum += costList[map.get(order)] * weightList[order];
 					parkCnt++;
-					totalCnt++;
 				}
-				
-				// 주차장이 다 찼을 때,
+				// 주차장에 공간이 없는 경우, 대기 큐에 추가
 				else {
 					
-					Stack<Integer> stack = new Stack<>();
-					stack.add(order);
-					int next = orderQ.poll();
-					
-					// 루프 돌면서 빠져나가는 차량을 먼저 나가게 해주고 들어오는 차량 순서 다시 큐에 채워줌
-					while(next > 0) {
-						stack.add(next);
-						next = orderQ.poll();
-					}
-					
-					visit[costMap.get(next*-1)] = false;
-					
-					while(!stack.isEmpty()) {
-						orderQ.addFirst(stack.pop());
-					}
-					
-					sum += costList[costMap.get(next*-1)] * weightList[order];
-					
-					orderQ.poll();
-					visit[costMap.get(next*-1)] = true;
-					costMap.put(order, costMap.get(next*-1));
-					costMap.remove(next*-1);
-					totalCnt++;
+					q.add(order);
 				}
 			}
-			
-			// 차량이 빠져나가는 경우
+			// 차량이 나갈 때,
 			else {
-				visit[costMap.get(order*-1)] = false;
-				costMap.remove(order*-1);
 				
-				parkCnt--;
-			}
-			
-			if(totalCnt >= M) {
-				break;
+				order = order * -1;
+				
+				// 주차장에 공간이 있는 경우, 할당되어 있던 비용 map에서 삭제시키고 주차 카운트 감소, 주차장 상태 변환
+				if(q.isEmpty()) {
+					
+					isUsing[map.get(order)] = false;
+					map.remove(order);
+					parkCnt--;
+				}
+				// 주차장에 공간이 없는 경우, 나가는 차량의 비용을 대기 큐 중 가장 앞에 있는 큐로 바꾸고 합산 증가
+				else {
+					
+					int qOrder = q.poll();
+					map.put(qOrder, map.get(order));
+					sum += costList[map.get(qOrder)] * weightList[qOrder];
+				}
 			}
 		}
+		
 		
 		System.out.println(sum);
 	}
